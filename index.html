@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXT</title>
+<link rel="icon" type="image/png" href="niger.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap" rel="stylesheet">
+
+<style>
+/* -------------------- GLOBAL -------------------- */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#050505;color:white; overflow-x: hidden;} /* Prevent side scroll */
+
+/* -------------------- NAV BAR -------------------- */
+header{
+    display:flex;
+    justify-content:space-between;
+    padding:15px 40px;
+    align-items:center;
+    background:#000;
+    position: relative;
+    z-index: 1000;
+}
+.logo{color:#ff0048;font-size:30px;font-weight:900;}
+
+/* Nav styling for Desktop */
+nav { display: flex; }
+nav a{margin:0 15px;text-decoration:none;color:#ccc;font-weight:600; transition: 0.3s;}
+nav a:hover{color:#ff0048;}
+
+/* Hamburger Menu Icon (Hidden on Desktop) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.icon-btn{
+    width:38px;height:38px;border-radius:50%;
+    border:none;background:#ff0000;color:white;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;cursor:pointer;transition:.25s;
+}
+.icon-btn:hover{background:#000000;}
+.icon-btn.crown{background:#3f3a3a;color:#000000;}
+.icon-btn.crown:hover{background:#000000;}
+.icon-btn img, .vip-btn img {
+    width: 22px; height: 22px; object-fit: contain; pointer-events: none;
+}
+
+.vip-btn{
+    width:38px;height:38px;border-radius:50%;
+    border:none;background:#fbff00;color:white;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;cursor:pointer;transition:.25s;
+}
+
+.login{
+    padding:7px 18px;border:none;background:#ff0048;
+    color:white;border-radius:5px;font-weight:600;cursor:pointer;
+}
+
+/* -------------------- HERO SLIDER CORE -------------------- */
+.slider-wrapper{
+    width:100%;margin-top:25px;display:flex;justify-content:center;
+}
+.slider-frame{
+    position:relative;
+    width:100%;
+    height:450px;
+    border-radius:26px;
+    padding:0;
+    background:#050505;
+    box-shadow:none;
+}
+.slider-inner{
+    position:relative;width:100%;height:100%;
+    border-radius:22px;background:#050505;overflow:hidden;
+}
+
+/* SLIDE BOX */
+.slide-box{
+    position:absolute;
+    width:60%;height:100%;
+    border-radius:40px;overflow:hidden;
+    transition:.7s;
+    opacity:.8;transform:scale(.9);
+    filter:brightness(80%);
+    border:none;box-shadow:none;
+    /* Default centering for desktop */
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+}
+.slide-box img{
+    width:100%;height:100%;object-fit:cover;
+}
+.slide-box.active{
+    width:75%;
+    left:50%;
+    transform:translateX(-50%) scale(1.05);
+    z-index:5;opacity:1;filter:brightness(100%) saturate(120%);
+}
+.slide-box.prev{
+    left:3%;width:46%;transform:scale(.96);opacity:.9;
+}
+.slide-box.next{
+    right:3%;width:46%;transform:scale(.96);opacity:.9;
+}
+
+/* SLIDE TEXT */
+.slide-content{
+    position:absolute;left:40px;bottom:35px;
+    max-width:420px;color:#fff;opacity:0;
+    transform:translateY(20px);transition:.4s;
+}
+.slide-box.active .slide-content{opacity:1;transform:translateY(0);}
+.slide-content h2{
+    font-size:26px;font-weight:800;margin-bottom:8px;
+    text-shadow:0 2px 8px rgba(0,0,0,.7);
+}
+.slide-content p{font-size:14px;color:#eee;margin-bottom:14px;}
+
+.btn-group{display:flex;gap:12px;}
+.btn{
+    padding:9px 22px;border-radius:25px;border:none;
+    cursor:pointer;font-weight:700;font-size:14px;transition:.25s;
+}
+.btn.watch{
+    background:linear-gradient(135deg,#ffd54f,#ffb300);
+    color:#000;box-shadow:0 0 12px rgba(255,213,79,.65);
+}
+.btn.plan{
+    background:linear-gradient(135deg,#ff3b6a,#9c27ff);
+    color:#fff;box-shadow:0 0 12px rgba(156,39,255,.65);
+}
+.btn:hover{transform:translateY(-1px) scale(1.03);opacity:.96;}
+
+/* SLIDER ARROWS */
+.arrow{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:50px;height:50px;border:none;border-radius:50%;
+    cursor:pointer;font-size:23px;color:#fff;
+    background:linear-gradient(135deg,#ff1744,#ff9100);
+    box-shadow:0 0 18px rgba(0,0,0,.6);
+    z-index:15;transition:.25s;
+}
+.left{left:9%;}
+.right{right:9%;}
+.arrow:hover{
+    background:linear-gradient(135deg,#ff4081,#ffc107);
+    transform:translateY(-50%) scale(1.1);
+}
+
+/* ---------- TOP 10 GLASS CAROUSEL ---------- */
+.top10-title{
+    padding:30px 50px 10px;
+    font-size:26px;
+}
+.top10-container{
+    width:100%;
+    padding:40px 50px 40px;
+    overflow:hidden;
+    position:relative;
+    padding-top: 60px;
+}
+.top10-track{
+    display:flex;
+    gap:25px;
+    width:max-content;
+    will-change:transform;
+}
+
+/* glass card */
+.top10-card{
+    position:relative;
+    width:190px;height:300px;
+    border-radius:18px;
+    overflow:visible;
+    flex-shrink:0;
+    cursor:pointer;
+    transition:transform .3s ease, box-shadow .3s ease, background .3s;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 0 16px rgba(0,0,0,.7);
+    backdrop-filter:blur(12px);
+}
+.card-image-wrapper {
+    width: 100%; height: 100%; border-radius: 18px; overflow: hidden; position: relative; z-index: 1;
+}
+.top10-card::before{
+    content:""; position:absolute;inset:-40%; background:radial-gradient(circle at 0 0,rgba(255,255,255,0.4),transparent 60%);
+    opacity:0;transition:.35s;mix-blend-mode:screen; z-index: 2; pointer-events: none;
+}
+.top10-card:hover::before{opacity:1;}
+.top10-card img{width:100%;height:100%;object-fit:cover;border-radius:18px;}
+.top10-card:hover{transform:scale(1.08) translateY(-4px);box-shadow:0 0 25px rgba(255,64,129,.7);z-index: 20;}
+
+/* Rank */
+.rank {
+    position: absolute; top: -25px; left: -15px; bottom: auto;
+    font-family: 'Montserrat', sans-serif; font-size: 100px; font-weight: 900; font-style: italic;
+    line-height: 1; z-index: 30; pointer-events: none;
+    background: linear-gradient(to bottom, #ffffff 20%, #a8a8a8 45%, #5e5e5e 50%, #a8a8a8 55%, #ffffff 90%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.8)); -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+}
+
+.badge {
+    position:absolute; top:10px; right:10px; width:40px; height:40px; z-index: 5;
+    background:rgb(255, 0, 0); border:2px solid rgba(255, 255, 255, 0.836); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);
+}
+.badge img {width:24px;height:24px;object-fit:contain;pointer-events:none;}
+
+/* arrows for top10 */
+.top10-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;
+    border-radius:50%;border:none;cursor:pointer;font-size:20px;
+    background:rgba(255,255,255,0.18);color:#fff;backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;z-index:50;transition:.25s;
+}
+.top10-arrow:hover{background:rgba(255,255,255,0.5);color:#000;}
+.top10-arrow.left{left:55px;}
+.top10-arrow.right{right:55px;}
+.top10-container.grabbing{cursor:grabbing;}
+
+/* Trailer Modal */
+.trailer-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:999;}
+.trailer-modal.show{display:flex;}
+.trailer-content{position:relative;width:80%;max-width:900px;background:#000;border-radius:16px;overflow:hidden;box-shadow:0 0 25px rgba(0,0,0,.9);}
+.trailer-close{position:absolute;top:10px;right:14px;border:none;background:transparent;color:#fff;font-size:26px;cursor:pointer;z-index:2;}
+.trailer-iframe{width:100%;height:500px;}
+
+/* ---------------- UPCOMING MOVIES ---------------- */
+.upcoming-section{padding:30px 50px 60px;}
+.upcoming-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.upcoming-header h3{font-size:24px;font-weight:700;}
+.view-all{border:none;background:transparent;color:#f1f1f1;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;opacity:0.8;}
+.view-all:hover{opacity:1;}
+.upcoming-wrapper{position:relative;overflow:hidden;}
+.upcoming-track{display:flex;gap:20px;overflow-x:auto;padding-bottom:8px;scroll-behavior:smooth;}
+.upcoming-track::-webkit-scrollbar{display:none;}
+
+.up-card{
+    position:relative;min-width:220px;max-width:220px;height:330px;border-radius:18px;
+    overflow:hidden;flex-shrink:0;background:#151515;cursor:pointer;
+    transform:translateY(0) scale(1);transition:transform .28s ease, box-shadow .28s ease;
+}
+.up-card img{width:100%;height:100%;object-fit:cover;display:block;border-radius:18px;}
+.up-watchlist{position:absolute;top:10px;left:10px;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.4);background:rgba(0,0,0,0.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;z-index:3;transition:.25s;}
+.up-watchlist:hover{background:#ff0048;border-color:#ff0048;}
+.up-tag{position:absolute;top:10px;right:10px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;color:#000;z-index:3;animation:badgePulse 1.6s infinite;}
+.up-tag.hot{background:#ff1744;color:#fff;}
+.up-tag.new{background:#00e676;color:#000;}
+.up-tag.vip{background:#ffd600;color:#000;}
+@keyframes badgePulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,0.4);}50%{transform:scale(1.08);box-shadow:0 0 12px 4px rgba(255,255,255,0.2);}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,0);}}
+
+.up-info{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92),rgba(0,0,0,0.0));padding:16px 14px;display:flex;flex-direction:column;justify-content:flex-end;opacity:0;transform:translateY(35px);transition:.28s;}
+.up-title{font-size:15px;font-weight:700;margin-bottom:4px;}
+.up-meta{font-size:11px;color:#ccc;margin-bottom:8px;}
+.up-rating{font-size:13px;color:#ffc107;margin-bottom:10px;}
+.up-actions{display:flex;gap:8px;}
+.up-btn{flex:1;padding:6px 0;border-radius:999px;border:none;font-size:12px;font-weight:700;cursor:pointer;}
+.up-btn.play{background:#ff0048;color:#fff;}
+.up-btn.more{background:rgba(255,255,255,0.12);color:#fff;}
+.up-card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 24px 40px rgba(0,0,0,0.8);}
+.up-card:hover .up-info{opacity:1;transform:translateY(0);}
+
+.up-arrow{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:4;transition:.25s;}
+.up-arrow.left{left:-10px;}
+.up-arrow.right{right:-10px;}
+.up-arrow:hover{background:#ff0048;}
+
+/* Footer */
+footer{background:#000;padding:18px;text-align:center;margin-top:30px;color:#888;font-size:14px;}
+.glass-upcoming {padding: 30px 50px;}
+.glass-track {display: flex; gap: 25px;}
+.glass-card {position: relative; width: 350px; height: 220px; border-radius: 18px; overflow: hidden; cursor: pointer; transition: 0.3s;}
+.glass-card img {width: 100%; height: 100%; object-fit: cover; transition: 0.35s;}
+.glass-card:hover img {transform: scale(1.1); filter: brightness(70%);}
+.glass-info {position: absolute; bottom: 12px; left: 12px; right: 12px; padding: 10px 14px; background: rgba(255,255,255,0.15); border-radius: 12px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.25); transform: translateY(20px); opacity: 0; transition: 0.35s;}
+.glass-card:hover .glass-info {opacity: 1; transform: translateY(0);}
+.glass-info h4 {font-size: 15px; margin-bottom: 8px;}
+.glass-play {background: #ff0048; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #fff;}
+.glass-play:hover {background: #ff1e63;}
+
+
+/* ======================================================= */
+/* RESPONSIVE / MOBILE CSS                    */
+/* ======================================================= */
+@media (max-width: 768px) {
+    /* --- Header & Navigation --- */
+    header { padding: 12px 18px; }
+    
+    .menu-toggle { display: flex; } /* Show hamburger */
+    
+    nav {
+        display: none; /* Hide default menu */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #000;
+        padding: 20px 0;
+        border-bottom: 1px solid #222;
+        z-index: 999;
+        text-align: center;
+    }
+    
+    /* Javascript adds this class to show menu */
+    nav.active { display: flex; }
+
+    nav a {
+        margin: 10px 0;
+        display: block;
+        font-size: 18px;
+    }
+
+    /* --- Hero Slider (Full Image Fix) --- */
+    .slider-frame {
+        height: 250px; /* Reduced height for mobile */
+    }
+
+    .slide-box {
+        width: 90%; /* Wider box to show full image */
+        border-radius: 18px;
+    }
+
+    .slide-box.active {
+        width: 95%; /* Almost full width */
+        transform: translateX(-50%) scale(1);
+    }
+    
+    /* Reposition Previous/Next slides */
+    .slide-box.prev {
+        left: -10%; /* Move further out */
+        width: 80%;
+    }
+    .slide-box.next {
+        right: -10%; /* Move further out */
+        width: 80%;
+    }
+
+    .slide-content {
+        left: 20px;
+        bottom: 20px;
+        max-width: 80%;
+    }
+    
+    .slide-content h2 {
+        font-size: 18px; /* Smaller text */
+    }
+    .slide-content p {
+        display: none; /* Hide description to save space for image */
+    }
+    .btn {
+        padding: 6px 16px;
+        font-size: 12px;
+    }
+
+    /* --- Top 10 Adjustments --- */
+    .top10-container { padding: 50px 15px 30px; }
+    .top10-arrow.left { left: 10px; }
+    .top10-arrow.right { right: 10px; }
+
+    /* --- Upcoming Adjustments --- */
+    .upcoming-section, .glass-upcoming { padding: 25px 15px; }
+    .up-arrow.left, .up-arrow.right { display: none; } /* Hide arrows, use swipe */
+    
+    /* Make scroll tracks touch friendly */
+    .glass-track, .upcoming-track {
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <h1 class="logo">NEXT</h1>
+    </div>
+
+    <nav class="nav-menu">
+        <a href="#">Home</a>
+        <a href="#">Movies</a>
+        <a href="#">TV Shows</a>
+        <a href="#">Sports</a>
+        <a href="#">Live TV</a>
+        <a href="#">News</a>
+    </nav>
+
+    <div class="header-actions">
+        <button class="icon-btn search">
+            <img src="shearch1.png" alt="search">
+        </button>
+        <button class="icon-btn crown">
+            <img src="crown.png" alt="vip">
+        </button>
+        <button class="login">LOGIN</button>
+    </div>
+</header>
+
+<div class="slider-wrapper">
+  <div class="slider-frame">
+    <div class="slider-inner">
+
+      <button class="arrow left">❮</button>
+      <button class="arrow right">❯</button>
+
+      <div class="slide-box active">
+          <img src="https://videoportal.viavilab.com/upload/tiger_3.jpg" loading="lazy">
+          <div class="slide-content">
+              <h2>Mission: Impossible - Dead Reckoning</h2>
+              <p>Action • Thriller • Adventure</p>
+              <div class="btn-group">
+                  <button class="btn watch">WATCH</button>
+                  <button class="btn plan">BUY PLAN</button>
+              </div>
+          </div>
+      </div>
+
+      <div class="slide-box next">
+          <img src="https://videoportal.viavilab.com/upload/Jawan.jpg" loading="lazy">
+          <div class="slide-content">
+              <h2>Jawan</h2>
+              <p>High-Octane Indian Action</p>
+              <div class="btn-group">
+                  <button class="btn watch">WATCH</button>
+                  <button class="btn plan">BUY PLAN</button>
+              </div>
+          </div>
+      </div>
+
+      <div class="slide-box prev">
+          <img src="https://videoportal.viavilab.com/upload/et00301886-vpwtttdmdt-landscape.png" loading="lazy">
+          <div class="slide-content">
+              <h2>Pathaan</h2>
+              <p>Spy • Mission • Blockbuster</p>
+              <div class="btn-group">
+                  <button class="btn watch">WATCH</button>
+                  <button class="btn plan">BUY PLAN</button>
+              </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<h3 class="top10-title">Top 10</h3>
+
+<div class="top10-container" id="top10">
+  <button class="top10-arrow left">❮</button>
+  <button class="top10-arrow right">❯</button>
+
+  <div class="top10-track">
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/ZI2ypTi8kEU">
+        <span class="rank">1</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/COv52Qyctws">
+        <span class="rank">2</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/kT0mA3kYzvl2UZGxhJnLyTUYa2z.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/d9MyW72ELq0">
+        <span class="rank">3</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/arf00BkwvXo0CFKbaD9OpqdE4Nu.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/qEVUtrk8_B4">
+        <span class="rank">4</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/rryN6GhaoovO3sM8IEqGyKgCmXf.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/2m1drlOZSDw">
+        <span class="rank">5</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/NNxYkU70HPurnNCSiCjYAmacwm.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/EXeTwQWrcwY">
+        <span class="rank">6</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/YoHD9XEInc0">
+        <span class="rank">7</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/bMISXhkBDll6JPsevdJJ1ItnW6S.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/6ZfuNTqbHE8">
+        <span class="rank">8</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/v7UF7ypAqjsFZFdjksjQ7IUpXdn.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/TcMBFSGVi1c">
+        <span class="rank">9</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/jj9ue91o7dVJNUL8pOMDjO0udfK.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+    <div class="top10-card" data-trailer="https://www.youtube.com/embed/1roy4o4tqQM">
+        <span class="rank">10</span>
+        <div class="card-image-wrapper">
+            <img loading="lazy" src="https://videoportal.viavilab.com/upload/images/1fMM5yjLYJNfO3CSQBpfC1kqeIK.jpg">
+        </div>
+        <span class="badge">
+            <img src="images-removebg-preview.png" alt="crown">
+        </span>
+    </div>
+
+  </div>
+</div>
+
+<section class="upcoming-section">
+  <div class="upcoming-header">
+      <h3>Upcoming Movies</h3>
+      <button class="view-all">View all ➜</button>
+  </div>
+
+  <div class="upcoming-wrapper">
+      <button class="up-arrow left">❮</button>
+      <button class="up-arrow right">❯</button>
+
+      <div class="upcoming-track">
+
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/05/62c42a8e5d1661657023118.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <span class="up-tag hot">HOT</span>
+              <div class="up-info">
+                  <div class="up-title">Mission Impossible</div>
+                  <div class="up-meta">Action • Spy • 2h 15m</div>
+                  <div class="up-rating">★★★★☆  8.5</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/05/62c45ac20bb291657035458.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <span class="up-tag new">NEW</span>
+              <div class="up-info">
+                  <div class="up-title">John Wick 4</div>
+                  <div class="up-meta">Thriller • Action • 2h 40m</div>
+                  <div class="up-rating">★★★★★  9.1</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/06/62c54a44b885c1657096772.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <span class="up-tag vip">VIP</span>
+              <div class="up-info">
+                  <div class="up-title">Avatar 2</div>
+                  <div class="up-meta">Sci-Fi • Fantasy • 3h 05m</div>
+                  <div class="up-rating">★★★★☆  8.2</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/05/62c450c849c411657032904.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <div class="up-info">
+                  <div class="up-title">Spider-Man</div>
+                  <div class="up-meta">Adventure • Superhero • 2h 10m</div>
+                  <div class="up-rating">★★★★★  9.0</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//keGfSvCmYj7CvdRx36OdVrAEibE.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <div class="up-info">
+                  <div class="up-title">Spider-Man</div>
+                  <div class="up-meta">Adventure • Superhero • 2h 10m</div>
+                  <div class="up-rating">★★★★★  9.0</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/05/62c41b7d049281657019261.png" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <div class="up-info">
+                  <div class="up-title">Spider-Man</div>
+                  <div class="up-meta">Adventure • Superhero • 2h 10m</div>
+                  <div class="up-rating">★★★★★  9.0</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/05/62c4542f3889d1657033775.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <div class="up-info">
+                  <div class="up-title">Spider-Man</div>
+                  <div class="up-meta">Adventure • Superhero • 2h 10m</div>
+                  <div class="up-rating">★★★★★  9.0</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+          <div class="up-card">
+              <img src="https://script.viserlab.com/playlab/demo/assets/images/item/portrait//2022/07/05/62c4215595d8f1657020757.jpg" loading="lazy">
+              <button class="up-watchlist">+</button>
+              <div class="up-info">
+                  <div class="up-title">Spider-Man</div>
+                  <div class="up-meta">Adventure • Superhero • 2h 10m</div>
+                  <div class="up-rating">★★★★★  9.0</div>
+                  <div class="up-actions">
+                      <button class="up-btn play">Watch Trailer</button>
+                      <button class="up-btn more">More Info</button>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</section>
+
+<section class="glass-upcoming">
+    <div class="upcoming-header">
+      <h3>Upcoming Shows</h3>
+      <button class="view-all">View all ➜</button>
+  </div>
+
+    <div class="upcoming-wrapper">
+      <button class="up-arrow left">❮</button>
+      <button class="up-arrow right">❯</button>
+
+    <div class="glass-track">
+
+        <div class="glass-card">
+            <img src="https://videoportal.viavilab.com/upload/images/foGkPxpw9h8zln81j63mix5B7m8.jpg">
+            <button class="up-watchlist">+</button>
+              <span class="up-tag new">Waiting</span>
+            <div class="glass-info">
+                <h4>Avatar: The Last Airbender</h4>
+                <button class="glass-play">▶ Play Trailer</button>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <img src="https://videoportal.viavilab.com/upload/images/suXX4sFFgUGMv47jCibP4hhsmN7.jpg">
+            <button class="up-watchlist">+</button>
+              <span class="up-tag new">Waiting</span>
+            <div class="glass-info">
+                <h4>Young Justice</h4>
+                <button class="glass-play">▶ Play Trailer</button>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <img src="https://editorial.rottentomatoes.com/wp-content/uploads/2024/06/HotD_Reviews-Rep.jpg">
+            <button class="up-watchlist">+</button>
+              <span class="up-tag new">Waiting</span>
+            <div class="glass-info">
+                <h4>Another Life</h4>
+                <button class="glass-play">▶ Play Trailer</button>
+            </div>
+        </div>
+
+        
+        <div class="glass-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPxPvwkcBacDGjhoUU49H2ImnSD7RbeJL-TQ&s">
+            <button class="up-watchlist">+</button>
+              <span class="up-tag new">Waiting</span>
+            <div class="glass-info">
+                <h4>Another Life</h4>
+                <button class="glass-play">▶ Play Trailer</button>
+            </div>
+        </div>
+
+    </div>
+    </div>
+</section>
+
+
+<footer>© 2025 Movie Portal • All Rights Reserved</footer>
+
+<script>
+// --- MOBILE MENU TOGGLE ---
+function toggleMenu() {
+    const nav = document.querySelector('.nav-menu');
+    nav.classList.toggle('active');
+}
+
+/* ---------- HERO SLIDER ---------- */
+let slides = document.querySelectorAll(".slide-box");
+let index = 0;
+
+function updateSlides(){
+    slides.forEach(s => s.className = "slide-box");
+    slides[index].classList.add("active");
+    let prev = (index - 1 + slides.length) % slides.length;
+    let next = (index + 1) % slides.length;
+    slides[prev].classList.add("prev");
+    slides[next].classList.add("next");
+}
+document.querySelector(".right").onclick = ()=>{ index = (index + 1) % slides.length; updateSlides(); };
+document.querySelector(".left").onclick  = ()=>{ index = (index - 1 + slides.length) % slides.length; updateSlides(); };
+setInterval(()=>{ index = (index + 1) % slides.length; updateSlides(); }, 5000);
+
+/* ---------- TOP 10 CAROUSEL (same as before) ---------- */
+const topContainer = document.querySelector('.top10-container');
+const track = document.querySelector('.top10-track');
+const cardsTop = Array.from(document.querySelectorAll('.top10-card'));
+
+let cardGap = 25;
+let cardWidth = cardsTop[0].offsetWidth + cardGap;
+let offset = 0;
+let autoId = null;
+
+cardsTop.forEach(card=>{
+    const clone = card.cloneNode(true);
+    track.appendChild(clone);
+});
+
+function setTrack(){ track.style.transform = `translateX(${offset}px)`; }
+function wrapOffset(){
+    const maxShift = -cardWidth * cardsTop.length;
+    if(offset <= maxShift) offset = 0;
+    if(offset > 0) offset = maxShift;
+}
+function startAuto(){
+    if(autoId) return;
+    const step = ()=>{
+        offset -= 1.0;
+        wrapOffset();
+        setTrack();
+        autoId = requestAnimationFrame(step);
+    };
+    step();
+}
+function stopAuto(){
+    if(autoId){ cancelAnimationFrame(autoId); autoId = null; }
+}
+startAuto();
+
+document.querySelector('.top10-arrow.right').addEventListener('click', ()=>{
+    stopAuto();
+    offset -= cardWidth;
+    wrapOffset();
+    setTrack();
+    startAuto();
+});
+document.querySelector('.top10-arrow.left').addEventListener('click', ()=>{
+    stopAuto();
+    offset += cardWidth;
+    wrapOffset();
+    setTrack();
+    startAuto();
+});
+
+let isDown = false;
+let startX, startOffset;
+topContainer.addEventListener('mousedown', e=>{
+    isDown = true;
+    topContainer.classList.add('grabbing');
+    stopAuto();
+    startX = e.pageX;
+    startOffset = offset;
+});
+window.addEventListener('mouseup', ()=>{
+    if(!isDown) return;
+    isDown = false;
+    topContainer.classList.remove('grabbing');
+    startAuto();
+});
+topContainer.addEventListener('mousemove', e=>{
+    if(!isDown) return;
+    const dx = e.pageX - startX;
+    offset = startOffset + dx;
+    wrapOffset();
+    setTrack();
+});
+
+/* touch swipe */
+let touchStartX = 0;
+topContainer.addEventListener("touchstart", e=>{
+    stopAuto();
+    touchStartX = e.touches[0].clientX;
+    startOffset = offset;
+},{passive:true});
+topContainer.addEventListener("touchmove", e=>{
+    const moveX = e.touches[0].clientX;
+    const dx = moveX - touchStartX;
+    offset = startOffset + dx;
+    wrapOffset();
+    setTrack();
+},{passive:true});
+topContainer.addEventListener("touchend", ()=>{ startAuto(); });
+
+/* ---------- Trailer MODAL for Top10 (same behaviour) ---------- */
+const modal = document.createElement('div');
+modal.className = 'trailer-modal';
+modal.innerHTML = `
+  <div class="trailer-content">
+    <button class="trailer-close">&times;</button>
+    <iframe class="trailer-iframe" id="trailerFrame"
+      src="" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>`;
+document.body.appendChild(modal);
+const trailerFrame = document.getElementById('trailerFrame');
+const closeBtn = modal.querySelector('.trailer-close');
+
+function openTrailer(url){
+    stopAuto();
+    trailerFrame.src = url + (url.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
+    modal.classList.add('show');
+}
+function closeTrailer(){
+    modal.classList.remove('show');
+    trailerFrame.src = "";
+    startAuto();
+}
+closeBtn.addEventListener('click', closeTrailer);
+modal.addEventListener('click', e=>{ if(e.target === modal) closeTrailer(); });
+
+document.querySelectorAll('.top10-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+        const url = card.dataset.trailer;
+        if(url) openTrailer(url);
+    });
+});
+
+/* ---------- UPCOMING ROW ARROWS ---------- */
+const upcomingTrack = document.querySelector('.upcoming-track');
+const upLeft  = document.querySelector('.up-arrow.left');
+const upRight = document.querySelector('.up-arrow.right');
+
+upRight.addEventListener('click', ()=>{
+    upcomingTrack.scrollBy({left:260, behavior:'smooth'});
+});
+upLeft.addEventListener('click', ()=>{
+    upcomingTrack.scrollBy({left:-260, behavior:'smooth'});
+});
+
+// Upwide track logic (not in HTML but was in script so kept blank or minimal)
+const upTrack = document.querySelector(".upwide-track");
+if(upTrack){
+    document.querySelector(".upwide-arrow.right").onclick = () => {
+        upTrack.scrollBy({left: 400, behavior: "smooth"});
+    };
+    document.querySelector(".upwide-arrow.left").onclick = () => {
+        upTrack.scrollBy({left: -400, behavior: "smooth"});
+    };
+}
+</script>
+
+</body>
+</html>
